@@ -1969,11 +1969,10 @@ https://github.com/karthink/gptel
    gptel-backend (gptel-make-gemini "Gemini"
                    :key (exec-path-from-shell-getenv "GEMINI_API_KEY")
                    :stream t
-                   :models '(gemini-2.5-flash-preview-05-20
-                             gemini-2.5-flash-preview-04-17
-                             gemini-2.0-flash
-                             gemini-pro
-                             gemini-1.5-pro-latest))
+                   :models '(gemini-2.5-flash-latest
+                             gemini-2.5-pro
+                             gemini-3-pro-preview
+                             ))
    gptel-default-mode 'org-mode
    ;; Whether supported media in chat buffers should be sent
    gptel-track-media t)
@@ -2867,6 +2866,17 @@ https://github.com/joostkremers/pandoc-mode
 (use-package pandoc-mode
   :hook ((pandoc-mode . pandoc-load-default-settings)
          (markdown-mode . pandoc-mode)))
+#+end_src
+
+** hide-secrets
+https://github.com/emacsmirror/hide-secrets
+
+#+begin_src emacs-lisp :lexical no
+(use-package hide-secrets
+  :ensure (:host github :repo "emacsmirror/hide-secrets")
+  :hook (hide-secrets-mode . reveal-mode)
+  ;; You can also add your own secrets by customizing hide-secrets-alist.
+  )
 #+end_src
 
 ** TODO howm - Handy own wiki mimic
@@ -4020,7 +4030,12 @@ https://github.com/mooz/js2-mode
   (add-to-list 'auto-mode-alist '("\\.ts[x]?\\'" . js2-mode))
   (add-to-list 'auto-mode-alist '("\\.jsx\\'" . js-mode))
   ;; Use Emacs 27 and want to write JSX?
-  (add-hook 'js-mode-hook 'js2-minor-mode))
+  (add-hook 'js-mode-hook 'js2-minor-mode)
+  (add-hook 'js2-mode-hook
+            (lambda ()
+              (make-local-variable 'js-indent-level)
+              (setq tab-width 2)
+              (setq js-indent-level 2))))
 
 
 ;; You may also want to hook it in for shell scripts running via node.js:
